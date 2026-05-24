@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segredo de Chocolate - Cardápio</title>
+    <style>
+        /* Importando a sua fonte exclusiva */
+        @font-face {
+            font-family: 'Quindelia';
+            src: url('Quindelia.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* Configurações Gerais */
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fcfaf7; /* Fundo off-white quentinho */
+            color: #3e2723; /* Marrom café escuro para os textos */
+        }
+        
+        /* Cabeçalho com a sua identidade */
+        header {
+            background-color: #2d1a12; /* Chocolate bem escuro */
+            color: #f5ebe6;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-family: 'Quindelia', cursive, sans-serif; /* Sua fonte aplicada aqui */
+            margin: 0;
+            font-size: 38px;
+            letter-spacing: 1px;
+            color: #d7ccc8; /* Tom pastel elegante */
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8d6e63;
+        }
+
+        /* Container do Cardápio */
+        .container {
+            padding: 20px;
+            max-width: 500px; /* Tamanho perfeito para celular */
+            margin: 0 auto;
+            padding-bottom: 90px; /* Espaço para o botão do whats não cobrir o conteúdo */
+        }
+
+        /* Títulos das Categorias */
+        .categoria-titulo {
+            font-family: 'Quindelia', sans-serif;
+            font-size: 26px;
+            color: #5d4037;
+            margin-top: 30px;
+            border-bottom: 1px dashed #d7ccc8;
+            padding-bottom: 5px;
+        }
+
+        /* Estrutura dos Itens do Cardápio */
+        .item-produto {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 18px 0;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .item-info {
+            flex: 1;
+            padding-right: 15px;
+        }
+
+        .item-nome {
+            font-weight: bold;
+            font-size: 16px;
+            margin: 0 0 4px 0;
+            color: #3e2723;
+        }
+
+        .item-descricao {
+            font-size: 13px;
+            color: #795548;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .item-preco {
+            font-weight: bold;
+            font-size: 16px;
+            color: #5d4037;
+            white-space: nowrap;
+        }
+
+        /* Botão do WhatsApp */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            max-width: 420px;
+            background-color: #4caf50;
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Segredo de Chocolate</h1>
+        <p>Cafeteria & Doceria</p>
+    </header>
+
+    <div class="container" id="cardapio">
+        </div>
+
+    <a href="https://wa.me/5511999999999?text=Olá! Gostaria de fazer um pedido/tirar uma dúvida." target="_blank" class="whatsapp-btn">
+        <span>💬 Fazer Pedido via WhatsApp</span>
+    </a>
+
+    <script>
+        // BANCO DE DADOS DO CARDÁPIO (JSON)
+        // É aqui que você altera, adiciona ou remove produtos facilmente!
+        const cardapioDados = {
+            "Cafés Especiais": [
+                { nome: "Espresso Segredo", descricao: "Nosso blend exclusivo com um toque leve de raspas de chocolate meio amargo.", preco: "R$ 8,50" },
+                { nome: "Cappuccino Italiano", descricao: "Café espresso, leite vaporizado e cacau em pó polvilhado.", preco: "R$ 12,00" },
+                { nome: "Latte Macchiato", descricao: "Leite quente, espuma de leite e uma dose de espresso.", preco: "R$ 11,50" }
+            ],
+            "Doces & Chocolates": [
+                { nome: "Taça Segredo de Chocolate", descricao: "Camadas de brownie fudge, brigadeiro belga artesanal e morangos frescos.", preco: "R$ 22,00" },
+                { nome: "Fatia de Bolo Red Velvet", descricao: "Massa aveludada com recheio leve de cream cheese e chocolate branco.", preco: "R$ 14,00" }
+            ],
+            "Salgados": [
+                { nome: "Pão de Queijo Recheado", descricao: "Pão de queijo mineiro recheado na hora com requeijão de corte.", preco: "R$ 7,50" },
+                { nome: "Quiche de Alho Poró", descricao: "Massa podre leve que derrete na boca com recheio cremoso.", preco: "R$ 11,00" }
+            ]
+        };
+
+        // Função que lê os dados acima e desenha na tela do celular do cliente
+        function renderizarCardapio() {
+            const container = document.getElementById('cardapio');
+            container.innerHTML = ''; // Limpa o container
+
+            // Passa por cada categoria
+            for (const categoria in cardapioDados) {
+                // Cria o título da categoria
+                const tituloElemento = document.createElement('h2');
+                tituloElemento.className = 'categoria-titulo';
+                tituloElemento.innerText = categoria;
+                container.appendChild(tituloElemento);
+
+                // Passa por cada produto daquela categoria
+                cardapioDados[categoria].forEach(produto => {
+                    const produtoElemento = document.createElement('div');
+                    produtoElemento.className = 'item-produto';
+                    
+                    produtoElemento.innerHTML = `
+                        <div class="item-info">
+                            <p class="item-nome">${produto.nome}</p>
+                            <p class="item-descricao">${produto.descricao}</p>
+                        </div>
+                        <div class="item-preco">${produto.preco}</div>
+                    `;
+                    container.appendChild(produtoElemento);
+                });
+            }
+        }
+
+        // Executa a função assim que a página carrega
+        renderizarCardapio();
+    </script>
+</body>
+</html>
